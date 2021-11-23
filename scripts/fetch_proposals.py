@@ -25,16 +25,17 @@ def fetch_mainnet():
 
     for p in proposal_events:
         p = p['args']
-        print(scheme.functions.getProposalExecutionTime('0x' + p['_proposalId'].hex(), mainnet_avatar).call())
-        print(get_title(p['_descriptionHash']))
-        print('0x' + p['_proposalId'].hex())
-        if p['_rewards'][1] > 0:
-            print('ETH:', Wei(p['_rewards'][1]).to('ether'))
-        if p['_rewards'][2] > 0:
-            print('ERC20:', Wei(p['_rewards'][2]).to('ether'))
-        if p['_reputationChange'] > 0:
-            print('REP:', Wei(p['_reputationChange']).to('ether'))
-        print('\n')
+        execution_ts = scheme.functions.getProposalExecutionTime('0x' + p['_proposalId'].hex(), mainnet_avatar).call()
+        if execution_ts == 0:
+            print(get_title(p['_descriptionHash']))
+            print('0x' + p['_proposalId'].hex())
+            if p['_rewards'][1] > 0:
+                print('ETH:', Wei(p['_rewards'][1]).to('ether'))
+            if p['_rewards'][2] > 0:
+                print('ERC20:', Wei(p['_rewards'][2]).to('ether'))
+            if p['_reputationChange'] != 0:
+                print('REP:', Wei(p['_reputationChange']).to('ether'))
+            print('\n')
 
 
 
